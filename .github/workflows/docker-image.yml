@@ -8,12 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build ./client --file Dockerfile --tag iamivke/multi-client
-      - run: docker build ./server --file Dockerfile --tag iamivke/multi-server
-      - run: docker build ./nginx --file Dockerfile --tag iamivke/multi-nginx
-      - run: docker build ./worker --file Dockerfile --tag iamivke/multi-worker
+      - run: docker build ./client --tag iamivke/multi-client
+      - run: docker build ./server --tag iamivke/multi-server
+      - run: docker build ./nginx --tag iamivke/multi-nginx
+      - run: docker build ./worker --tag iamivke/multi-worker
 
       - run: docker push iamivke/multi-client
       - run: docker push iamivke/multi-nginx
@@ -21,7 +21,7 @@ jobs:
       - run: docker push iamivke/multi-worker
 
       - name: Generate deployment package
-        run: zip -r ocker-multi.zip . -x '*.git*'
+        run: zip -r docker-multi.zip . -x '*.git*'
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
